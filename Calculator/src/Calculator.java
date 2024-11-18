@@ -2,7 +2,6 @@ public class Calculator {
     private double result = 0;
     private String operator = "";
 
-    
     public void calculate(double input) {
         switch (operator) {
             case "+":
@@ -18,22 +17,28 @@ public class Calculator {
                 if (input != 0) {
                     result /= input;
                 } else {
-                    throw new ArithmeticException("Are you realy trying to divide by 0? ");
+                    throw new ArithmeticException("Cannot divide by zero");
                 }
                 break;
             default:
-                result = input; // first number entered
+                result = input; // Primeiro número inserido
                 break;
         }
     }
-    public double getResult(){
+    
+
+    public double getResult() {
         return result;
     }
-    public void setOperator(String operator){
+
+    public void setOperator(String operator) {
         this.operator = operator;
     }
-    public void reset(){
+
+    public void reset() {
         result = 0;
-        operator="";
+        operator = "";
     }
+
+
 }

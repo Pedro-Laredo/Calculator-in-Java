@@ -9,22 +9,22 @@ public class CalculatorGUI implements ActionListener {
     private Calculator calculator;
     private String currentInput = "";
 
-    // Constructor for the calculator interface
+    // Construtor da interface
     public CalculatorGUI() {
         calculator = new Calculator();
         frame = new JFrame();
 
-        // Display field
+        // Campo de exibição
         display = new JTextField();
         display.setEditable(false);
         display.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Main panel for buttons
+        // Painel principal para botões
         JPanel panel = new JPanel();
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         panel.setLayout(new GridLayout(4, 4, 5, 5));
 
-        // Add buttons for calculator digits and basic operators
+        // Botões da calculadora
         String[] buttons = {
             "7", "8", "9", "/",
             "4", "5", "6", "*",
@@ -49,42 +49,46 @@ public class CalculatorGUI implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String command = e.getActionCommand();
-        if ("0123456789".contains(command)) {
+
+        if ("0123456789".contains(command)) { // Número digitado
             currentInput += command;
             display.setText(currentInput);
-        } else if (command.equals("C")) {
+        } else if (command.equals("C")) { // Botão de reset
             currentInput = "";
             calculator.reset();
             display.setText("");
-        } else if (command.equals("=")) {
+        } else if (command.equals("=")) { // Calcula e mostra o resultado
             try {
-                calculator.calculate(Double.parseDouble(currentInput));
-                currentInput = String.valueOf(calculator.getResult());
-                display.setText(currentInput);
+                if (!currentInput.isEmpty()) { // Evita erro se "=" for pressionado sem entrada
+                    calculator.calculate(Double.parseDouble(currentInput));
+                }
+                display.setText(String.valueOf(calculator.getResult()));
+                currentInput = ""; // Limpa a entrada para começar novas operações
             } catch (ArithmeticException ex) {
-                display.setText("Error: " + ex.getMessage()); // Display custom error message
-                calculator.reset(); // Reset calculator state
+                display.setText("Error: " + ex.getMessage());
+                calculator.reset();
                 currentInput = "";
             } catch (NumberFormatException ex) {
                 display.setText("Invalid input");
                 currentInput = "";
             }
-        } else { // if an operator is pressed
-            if (!currentInput.isEmpty()) {
-                try {
+        } else { // Operador pressionado
+            try {
+                if (!currentInput.isEmpty()) {
                     calculator.calculate(Double.parseDouble(currentInput));
-                    calculator.setOperator(command);
-                    currentInput = ""; // Reset currentInput for the next number
-                } catch (ArithmeticException ex) {
-                    display.setText("Error: " + ex.getMessage()); // Display custom error message
-                    calculator.reset(); // Reset calculator state
-                    currentInput = "";
                 }
+                calculator.setOperator(command); // Define o novo operador
+                display.setText(String.valueOf(calculator.getResult())); // Mostra o resultado parcial
+                currentInput = ""; // Reseta o número atual
+            } catch (ArithmeticException ex) {
+                display.setText("Error: " + ex.getMessage());
+                calculator.reset();
+                currentInput = "";
             }
         }
     }
 
     public static void main(String[] args) {
-        new CalculatorGUI(); // Start the calculator application
+        new CalculatorGUI(); // Inicia a calculadora
     }
 }
