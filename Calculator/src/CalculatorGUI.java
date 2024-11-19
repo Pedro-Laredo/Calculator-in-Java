@@ -34,6 +34,7 @@ public class CalculatorGUI implements ActionListener {
 
         for (String text : buttons) {
             JButton button = new JButton(text);
+            button.setBackground(Color.orange);
             button.addActionListener(this);
             panel.add(button);
         }
